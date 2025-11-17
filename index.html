@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RewardADs — Goodbye micro-transations, welcome RewardADs</title>
+    <link
+      rel="icon"
+      href="https://storage.rewardads.me/defaults/rewardads-logo-rounded.png"
+      type="image/png"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <style>
+      :root {
+  --bg: #0a0a0a;
+  --panel: #111214;
+  --panel-2: #0f1012;
+  --text: #e6e6e6;
+  --muted: #a9a9a9;
+  --brand: #ff9800;
+  --brand-900: #2b1a00;
+  --accent: #1f2937;
+  --success: #22c55e;
+  --blue: #3b82f6;
+  --radius: 16px;
+  --radius-lg: 22px;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --glow: 0 0 60px 10px rgba(255, 152, 0, 0.16);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", system-ui, Segoe UI, Roboto, Arial, Helvetica,
+    sans-serif;
+  background: radial-gradient(
+      1200px 400px at 50% -120px,
+      rgba(255, 152, 0, 0.08),
+      transparent 60%
+    ),
+    var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.container {
+  max-width: 1100px;
+  margin-inline: auto;
+  padding-inline: 24px;
+  padding: 20px !important;
+}
+
+.header {
+  position: relative;
+  z-index: 10;
+  backdrop-filter: saturate(1.2) blur(8px);
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 10, 0.85),
+    rgba(10, 10, 10, 0.35)
+  );
+  border-bottom: 1px solid #171717;
+  padding: 10px;
+}
+
+
+.navwrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+.brand img {
+  height: 34px;
+  width: 34px;
+  border-radius: 10px;
+  box-shadow: var(--glow);
+}
+
+.brand span {
+  font-size: 18px;
+  color: var(--text);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav a {
+  color: #cfcfcf;
+  padding: 0.55rem 0.9rem;
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+.nav a:hover {
+  color: #fff;
+  background: #151515;
+}
+
+.menu-btn {
+  display: none;
+  color: var(--brand);
+  font-size: 22px;
+  background: none;
+  border: 0;
+}
+#closeSheet { display: inline-flex; }
+
+
+@media (max-width: 880px) {
+  .nav {
+    display: none;
+  }
+  .menu-btn {
+    display: block;
+  }
+  .fab {
+    /* Su mobile il FAB è sempre visibile */
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.sheet {
+  position: fixed !important;
+  inset: 0 !important;
+  display: block !important;
+  background: rgba(0,0,0,.82) !important;
+  z-index: 2147483647 !important;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: opacity 0.3s ease, transform 0s 0.3s;
+}
+
+.sheet.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+  transition: opacity 0.3s ease, transform 0s;
+}
+
+.sheet .panel{
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  height: 100vh !important;
+  width: min(92vw, 360px) !important;
+  margin: 0 !important;
+  border-left: 1px solid #1d1d1d;
+  background: var(--panel);
+  padding: 18px;
+  box-shadow: -8px 0 35px rgba(0,0,0,.55);
+}
+
+body.menu-open .header{
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+body.menu-open{ overflow: hidden !important; }
+
+.sheet a {
+  display: block;
+  padding: 12px 14px;
+  border-radius: 12px;
+  color: #d6d6d6;
+}
+
+.sheet a:hover {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.hero {
+  position: relative;
+  padding: 76px 0 40px;
+}
+
+.hero h1 {
+  font-size: clamp(32px, 6vw, 54px);
+  line-height: 1.05;
+  margin: 10px 0 12px;
+  font-weight: 800;
+}
+
+.hero p {
+  max-width: 780px;
+  color: #d9d9d9;
+  font-size: clamp(16px, 2.2vw, 18px);
+  margin: 0 0 26px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: var(--brand);
+  color: #111;
+  font-weight: 700;
+  border: 1px solid #c77700;
+  box-shadow: var(--glow);
+  transition: transform 0.15s ease, filter 0.2s;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn.ghost {
+  background: #161616;
+  color: #f5f5f5;
+  border: 1px solid #262626;
+}
+
+.btn.ghost:hover {
+  filter: brightness(1.05);
+}
+
+.app-pop {
+  position: fixed;
+  right: 22px;
+  top: 100px;
+  width: 320px;
+  background: linear-gradient(180deg, #161719, #141517);
+  border: 1px solid #232323;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  z-index: 30;
+  transition: transform 0.4s ease, opacity 0.25s;
+}
+
+.app-pop .content {
+  margin-top: 8px;
+  color: #cfcfcf;
+  padding: 14px 18px;
+}
+
+.app-pop .row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.app-pop .content {
+  margin-top: 8px;
+  color: #cfcfcf;
+  padding: 14px 16px;
+}
+
+.app-pop .content p {
+  margin-bottom: 8px;
+}
+
+.app-pop header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: #ffd699;
+  padding: 10px 16px 4px 16px;
+}
+
+.app-pop header i {
+  color: var(--brand);
+  margin-top: 2px;
+}
+
+
+.app-pop.min {
+  opacity: 0;
+  transform: translate(40px, -20px) scale(0.9);
+  pointer-events: none;
+}
+
+.app-pop header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: #ffd699;
+}
+
+.app-pop header i {
+  color: var(--brand);
+}
+
+.app-pop .content {
+  margin-top: 8px;
+  color: #cfcfcf;
+}
+
+.app-pop .row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.app-pop .close {
+  margin-left: auto;
+  background: none;
+  border: 0;
+  color: #999;
+}
+
+.fab {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #202020;
+  border: 1px solid #2b2b2b;
+  color: #fff;
+  box-shadow: var(--shadow);
+  z-index: 35;
+  transform: scale(0);
+  opacity: 1;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.fab.show {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.fab.show:hover {
+  transform: scale(1) translateY(-8px);
+}
+
+.section {
+  padding: 64px 0;
+}
+
+.section h2 {
+  font-weight: 800;
+  font-size: clamp(24px, 4.3vw, 34px);
+  margin: 0 0 18px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.card.hover-up:hover {
+  transform: translateY(-8px) !important;
+}
+
+.kpi.hover-up:hover {
+  transform: translateY(-8px) !important;
+}
+
+.step.hover-up:hover {
+  transform: translateY(-8px) !important;
+}
+
+.addon.hover-up:hover {
+  transform: translateY(-8px) !important;
+}
+
+@media (max-width: 900px) {
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border: 1px solid #1e1e1e;
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 10px 60px rgba(255, 152, 0, 0.06);
+}
+
+.card h3 {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+
+.card p {
+  margin: 0;
+  color: #cfcfcf;
+}
+
+.card .icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #191919;
+  border: 1px solid #232323;
+  margin-bottom: 12px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+.kpi {
+  position: relative;
+  padding: 22px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, #131313, #101010);
+  border: 1px solid #1a1a1a;
+  box-shadow: var(--glow);
+}
+
+.kpi .label {
+  color: #bfbfbf;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.kpi .value {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-weight: 800;
+  font-size: clamp(28px, 5.6vw, 40px);
+  margin-top: 6px;
+}
+
+.kpi i {
+  color: var(--brand);
+}
+
+.spark {
+  height: 54px;
+  margin-top: 10px;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 1000px) {
+  .steps {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .steps {
+    grid-template-columns: 1fr;
+  }
+}
+
+.step {
+  background: linear-gradient(180deg, #121212, #0f0f0f);
+  border: 1px solid #1c1c1c;
+  padding: 20px;
+  border-radius: 16px;
+}
+
+.step .num {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: #1b1b1b;
+  border: 1px solid #262626;
+  color: #fff;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.addons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .addons {
+    grid-template-columns: 1fr;
+  }
+}
+
+.addon {
+  background: linear-gradient(180deg, #121212, #0f0f0f);
+  border: 1px solid #1c1c1c;
+  padding: 18px;
+  border-radius: 16px;
+}
+
+.addon ul {
+  margin: 10px 0 0 18px;
+  color: #cfcfcf;
+}
+
+.cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  background: linear-gradient(90deg, rgba(255, 152, 0, 0.16), transparent 50%),
+    #0b0b0b;
+  border: 1px solid #1b1b1b;
+  padding: 26px;
+  border-radius: 20px;
+}
+
+.cta h3 {
+  margin: 0;
+}
+
+@media (max-width: 820px) {
+  .cta {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+footer {
+  margin: 60px 0 30px;
+  color: #a6a6a6;
+  text-align: center;
+  font-size: 14px;
+}
+
+footer a {
+  color: #9ecbff;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.show {
+  opacity: 1;
+  transform: none;
+}
+    </style>
+  </head>
+
+  <body>
+    <header class="header">
+      <div class="container navwrap">
+        <a class="brand" href="#" id="homeLink">
+          <img
+            src="https://storage.rewardsx.net/defaults/rewardads-logo-rounded.png"
+            alt="RewardADs logo"
+          />
+          <span>RewardADs</span>
+        </a>
+        <nav class="nav" aria-label="Main menu">
+          <a href="https://rewardsx.net/"
+            ><i class="fa-solid fa-gift"></i> RewardX</a
+          >
+          <a href="https://rewardads.rewardsx.net/"
+            ><i class="fas fa-coins"></i> RewardADs</a
+          >
+          <a href="https://discordreward.rewardsx.net/"
+            ><i class="fa-brands fa-discord"></i> DiscordReward</a
+          >
+        </nav>
+        <button class="menu-btn" id="openSheet" aria-label="Open menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </header>
+
+    <aside class="app-pop" id="appPop" ...>
+      <header>
+        <i class="fa-solid fa-bolt"></i>
+        RewardADs App
+        <button class="close" title="Minimize" id="minPop">
+          <i class="fa-solid fa-minus"></i>
+        </button>
+      </header>
+      <div class="content">
+        Manage your AdBits wherever you are.
+        <div class="row">
+          <a class="btn" href="https://rewardads.me/"
+            ><i class="fa-solid fa-bolt"></i> Launch</a
+          >
+          <a class="btn ghost" href="https://dash.rewardsx.net/" target="_blank"
+            ><i class="fa-solid fa-rocket"></i> Dashboard</a
+          >
+        </div>
+      </div>
+    </aside>
+    <button class="fab hover-up" id="fab" title="Restore popup">
+      <i class="fa-solid fa-bolt"></i>
+    </button>
+
+    <section class="hero container">
+      <div class="reveal" data-reveal>
+        <h1>Goodbye micro-transations<br />welcome RewardADs</h1>
+        <p>
+          RewardADs enables platforms to generate revenue by converting users'
+          ad engagement into <strong>AdBits</strong>, which can be spent on
+          <strong>rewards</strong> within the platform.
+        </p>
+        <div class="actions">
+          <a class="btn" href="https://dash.rewardsx.net/" target="_blank"
+            ><i class="fa-solid fa-rocket"></i> Get Started</a
+          >
+          <a class="btn ghost" href="#stats"
+            ><i class="fa-solid fa-signal"></i> View Statistics</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2 class="reveal" data-reveal>How does it work?</h2>
+      <p class="muted reveal" data-reveal>
+        Discover the RewardADs ecosystem in three simple steps.
+      </p>
+
+      <div class="grid-3" style="margin-top: 16px">
+        <article class="card hover-up reveal" data-reveal>
+          <div class="icon"><i class="fas fa-coins"></i></div>
+          <h3>AdBits</h3>
+          <p>Users interact with ads and earn AdBits directly from the app.</p>
+        </article>
+
+        <article class="card hover-up reveal" data-reveal>
+          <div class="icon"><i class="fa-solid fa-store"></i></div>
+          <h3>Shopping</h3>
+          <p>Users spend AdBits to purchase perks and exclusive rewards.</p>
+        </article>
+
+        <article class="card hover-up reveal" data-reveal>
+          <div class="icon"><i class="fa-solid fa-cash-register"></i></div>
+          <h3>Revenue</h3>
+          <p>Platforms generate real income from AdBits spent by users.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="stats" class="section container">
+      <h2 class="reveal" data-reveal>Realtime Statistics</h2>
+      <p class="muted reveal" data-reveal>Automatically updated.</p>
+
+      <div class="stats" style="margin-top: 14px">
+        <div class="kpi hover-up reveal" data-reveal>
+          <div class="label">AdBits Purchased</div>
+          <div class="value">
+            <i class="fa-solid fa-arrow-trend-up"></i>
+            <span id="kpiBought">0</span>
+          </div>
+          <canvas class="spark" id="sparkBought" aria-hidden="true"></canvas>
+        </div>
+
+        <div class="kpi hover-up reveal" data-reveal>
+          <div class="label">AdBits Spent</div>
+          <div class="value">
+            <i class="fa-solid fa-fire"></i>
+            <span id="kpiSpent">0</span>
+          </div>
+          <canvas class="spark" id="sparkSpent" aria-hidden="true"></canvas>
+        </div>
+
+        <div class="kpi hover-up reveal" data-reveal>
+          <div class="label">Total Purchases</div>
+          <div class="value">
+            <i class="fa-solid fa-basket-shopping"></i>
+            <span id="kpiPurchases">0</span>
+          </div>
+          <canvas class="spark" id="sparkPurchases" aria-hidden="true"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container">
+      <h2 class="reveal" data-reveal>Step-by-step</h2>
+      <div class="steps" style="margin-top: 10px">
+        <div class="step hover-up reveal" data-reveal>
+          <div class="num">1</div>
+          <strong>Create Platform</strong>
+          <p class="muted">
+            Create your first platform from the official portal.
+          </p>
+        </div>
+
+        <div class="step hover-up reveal" data-reveal>
+          <div class="num">2</div>
+          <strong>Configure RewardADs</strong>
+          <p class="muted">Enter your keys and set up your rewards.</p>
+        </div>
+
+        <div class="step hover-up reveal" data-reveal>
+          <div class="num">3</div>
+          <strong>Monetize</strong>
+          <p class="muted">Turn engagement into revenue.</p>
+        </div>
+      </div>
+      <p class="muted" style="margin-top: 20px">
+        For more information ⇒
+        <a href="https://docs.rewardsx.net/rewardads" target="_blank">
+          https://docs.rewardsx.net/rewardads
+        </a>
+      </p>
+    </section>
+
+    <section class="section container">
+      <h2 class="reveal" data-reveal>Supported Platforms</h2>
+      <div class="addons" style="margin-top: 12px">
+        <div class="addon hover-up reveal" data-reveal>
+          <h3><i class="fa-solid fa-cube"></i> Minecraft</h3>
+          <ul>
+            <li>Supports RewardADs plugin</li>
+            <li>Integrates with RewardX</li>
+            <li>Automatic rewards sync</li>
+          </ul>
+        </div>
+
+        <div class="addon hover-up reveal" data-reveal>
+          <h3><i class="fa-solid fa-globe"></i> Websites</h3>
+          <ul>
+            <li>Embed RewardADs widgets</li>
+            <li>Direct purchase on your website</li>
+            <li>Track purchases & AdBits</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="cta reveal" data-reveal>
+        <div>
+          <h3>Have a platform? Start monetizing today</h3>
+          <p class="muted">
+            Implement RewardADs on your platform and start generating revenue
+            easily and transparently.
+          </p>
+        </div>
+        <a class="btn" href="https://dash.rewardsx.net/" target="_blank"
+          ><i class="fa-solid fa-rocket"></i> Create your platform</a
+        >
+      </div>
+    </section>
+
+    <footer>
+      &copy; <span id="year"></span> RewardADs — All rights reserved.<br />
+      Need help?
+      <a href="https://discord.rewardsx.net" target="_blank"
+        ><i class="fa-brands fa-discord"></i> Join Discord</a
+      >
+      • Contact us:
+      <a href="mailto:commercial@rewardsx.net"
+        ><i class="fa-solid fa-envelope"></i> commercial@rewardsx.net</a
+      >
+    </footer>
+
+    <script src="./main.js" defer></script>
+    
+    <div class="sheet" id="sheet" aria-hidden="true">
+      <div class="panel">
+        <div
+          class="container"
+          style="
+            padding: 6px 0 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+          "
+        >
+          <img
+            src="https://storage.rewardsx.net/defaults/rewardads-logo-rounded.png"
+            alt="logo"
+            style="height: 28px; border-radius: 8px"
+          />
+          <strong>RewardADs</strong>
+          <button
+            class="menu-btn"
+            id="closeSheet"
+            aria-label="Close"
+            style="margin-left: auto"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <a href="https://rewardsx.net/Downloads/"
+          ><i class="fa-solid fa-gift"></i> RewardX</a
+        >
+        <a href="https://rewardads.rewardsx.net/"
+          ><i class="fas fa-coins"></i> RewardADs</a
+        >
+        <a href="https://discordreward.rewardsx.net/"
+          ><i class="fa-brands fa-discord"></i> DiscordReward</a
+        >
+      </div>
+    </div>
+  </body>
+</html>
